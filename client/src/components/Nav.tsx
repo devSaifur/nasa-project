@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 const Nav = () => {
   return (
-    <ul className="flex items-center gap-8 font-bold text-blue-500">
+    <ul className="flex items-center gap-8 font-bold">
       <li className="space-x-1">
         <span>🛸</span>
         <Link to="/" className="underline-offset-4 hover:underline">

@@ -3,7 +3,7 @@ import Navbar from './Navbar'
 
 const AppLayout = () => {
   return (
-    <div className="bg-primary h-screen px-40 py-8 text-white">
+    <div className="bg-primary text-primary h-screen px-40 py-8">
       <Navbar />
       <Outlet />
     </div>

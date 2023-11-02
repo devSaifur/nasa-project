@@ -16,9 +16,13 @@ module.exports = {
       },
     },
     extend: {
+      colors: {
+        primary: '#26dafd',
+      },
       backgroundImage: {
         primary: "url('/img/background-large.jpg')",
       },
+
       keyframes: {
         'accordion-down': {
           from: { height: 0 },

@@ -1,4 +1,5 @@
 import { DatePicker } from '@/components/ui/DatePicker'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -11,7 +12,7 @@ import {
 
 const Launch = () => {
   return (
-    <div className="mx-auto flex max-w-4xl flex-col pt-24 text-blue-300">
+    <div className="mx-auto flex max-w-4xl flex-col pt-24">
       <div>
         <p>
           Schedule a mission launch for interstellar travel to one of the Kepler
@@ -67,6 +68,8 @@ const Launch = () => {
           </Select>
         </div>
       </div>
+
+      <Button variant="outline">Launch Mission</Button>
     </div>
   )
 }
