@@ -20,7 +20,7 @@ function DatePicker() {
         <Button
           variant={'outline'}
           className={cn(
-            'w-[240px] justify-start text-left font-normal',
+            'w-[240px] justify-start border-primary text-left font-normal',
             !date && 'text-muted-foreground'
           )}
         >

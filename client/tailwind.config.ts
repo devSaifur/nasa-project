@@ -19,6 +19,9 @@ module.exports = {
       colors: {
         primary: '#26dafd',
       },
+      borderColor: {
+        primary: '#26dafd',
+      },
       backgroundImage: {
         primary: "url('/img/background-large.jpg')",
       },

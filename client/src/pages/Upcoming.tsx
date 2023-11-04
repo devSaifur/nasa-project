@@ -8,23 +8,22 @@ const Upcoming = () => {
         </p>
       </div>
 
-      <table>
+      <table className="">
         <tr>
-          <th>No.</th>
-          <th>Date</th>
-          <th>Mission </th>
-          <th>Rocket</th>
-          <th>Destination</th>
+          <th className="text-start">No.</th>
+          <th className="text-start">Date</th>
+          <th className="text-start">Mission </th>
+          <th className="text-start">Rocket</th>
+          <th className="text-start">Destination</th>
         </tr>
+
+        {/* <button>❌</button> */}
         <tr>
-          <th>
-            <button>❌</button>
-          </th>
-          <th>226</th>
-          <th>Fri JUL 07 2023</th>
-          <th>Mission Name</th>
-          <th>Rocket Name</th>
-          <th>Destination Name</th>
+          <th className="text-start">226</th>
+          <th className="text-start">Fri JUL 07 2023</th>
+          <th className="text-start">Mission Name</th>
+          <th className="text-start">Rocket Name</th>
+          <th className="text-start">Destination Name</th>
         </tr>
       </table>
     </div>
