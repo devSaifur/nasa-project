@@ -12,21 +12,29 @@ function isHabitablePlanet(planet: Planet) {
   )
 }
 
-createReadStream('./data/kepler_data.csv')
-  .pipe(
-    parse({
-      comment: '#',
-      columns: true,
-    })
-  )
-  .on('data', (data) => {
-    if (isHabitablePlanet(data)) habitablePlanet.push(data)
+function loadPlanetsData() {
+  return new Promise<void>((resolve, reject) => {
+    createReadStream('./data/kepler_data.csv')
+      .pipe(
+        parse({
+          comment: '#',
+          columns: true,
+        })
+      )
+      .on('data', (data) => {
+        if (isHabitablePlanet(data)) habitablePlanet.push(data)
+      })
+      .on('error', (err) => {
+        console.log(err)
+        reject(err)
+      })
+      .on('end', () => {
+        console.log(
+          `${habitablePlanet.length} habitable planets have been found`
+        )
+        resolve()
+      })
   })
-  .on('error', (err) => {
-    console.log(err)
-  })
-  .on('end', () => {
-    console.log(`${habitablePlanet.length} habitable planets have been found`)
-  })
+}
 
-export { habitablePlanet }
+export { habitablePlanet, loadPlanetsData }

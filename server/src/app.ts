@@ -6,7 +6,7 @@ const app = express()
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: process.env.DOMAIN_NAME,
   })
 )
 app.use(express.json())

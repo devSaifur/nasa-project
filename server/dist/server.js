@@ -3,10 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var http_1 = require("http");
-var app_1 = __importDefault(require("./app"));
-var PORT = process.env.PORT || 4000;
-var server = (0, http_1.createServer)(app_1.default);
-server.listen(PORT, function () {
-    console.log("Server is running on port ".concat(PORT));
-});
+const http_1 = require("http");
+const app_1 = __importDefault(require("./app"));
+const planets_model_1 = require("./models/planets.model");
+const PORT = process.env.PORT || 4000;
+const server = (0, http_1.createServer)(app_1.default);
+async function startServer() {
+    await (0, planets_model_1.loadPlanetsData)();
+    server.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
+startServer();
