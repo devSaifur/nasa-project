@@ -19,11 +19,12 @@ function loadPlanetsData() {
             columns: true,
         }))
             .on('data', (data) => {
-            if (isHabitablePlanet(data))
+            if (isHabitablePlanet(data)) {
                 habitablePlanet.push(data);
+            }
         })
             .on('error', (err) => {
-            console.log(err);
+            console.error(err);
             reject(err);
         })
             .on('end', () => {

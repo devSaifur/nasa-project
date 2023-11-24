@@ -9,7 +9,13 @@ const planets_model_1 = require("./models/planets.model");
 const PORT = process.env.PORT || 4000;
 const server = (0, http_1.createServer)(app_1.default);
 async function startServer() {
-    await (0, planets_model_1.loadPlanetsData)();
+    try {
+        await (0, planets_model_1.loadPlanetsData)();
+    }
+    catch (error) {
+        console.log(error);
+        console.log('Failed to load planets data');
+    }
     server.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });

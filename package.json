@@ -9,7 +9,7 @@
     "install": "pnpm run install-client & pnpm run install-server",
     "client": "pnpm dev --prefix client",
     "server": "pnpm dev --prefix server",
-    "watch": "pnpm run client & pnpm run server",
+    "watch": "pnpm run client && pnpm run server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

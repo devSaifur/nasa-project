@@ -8,7 +8,12 @@ const PORT = process.env.PORT || 4000
 const server = createServer(app)
 
 async function startServer() {
-  await loadPlanetsData()
+  try {
+    await loadPlanetsData()
+  } catch (error) {
+    console.log(error)
+    console.log('Failed to load planets data')
+  }
 
   server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
