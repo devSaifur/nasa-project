@@ -4,15 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install-client": "pnpm install --prefix client",
-    "install-server": "pnpm install --prefix server",
-    "install": "pnpm run install-client & pnpm run install-server",
-    "client": "pnpm dev --prefix client",
-    "server": "pnpm dev --prefix server",
-    "watch": "pnpm run client && pnpm run server",
+    "client": "cd client && pnpm dev",
+    "server": "cd server && pnpm dev",
+    "dev": "concurrently --kill-others-on-fail \"pnpm run client\" \"pnpm run server\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "devSaifur",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }
