@@ -1,5 +1,5 @@
 import express from 'express'
-import { habitablePlanet } from '../models/planets.model'
+import { habitablePlanet } from '../../models/planets.model'
 
 const planetsRouter = express.Router()
 
