@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.launches = void 0;
+exports.getAllLaunches = void 0;
 const launches = new Map();
-exports.launches = launches;
 const launch = {
     flightNumber: 100,
     mission: 'Kepler Exploration X',
@@ -14,3 +13,7 @@ const launch = {
     success: true,
 };
 launches.set(launch.flightNumber, launch);
+function getAllLaunches() {
+    return Array.from(launches.values());
+}
+exports.getAllLaunches = getAllLaunches;

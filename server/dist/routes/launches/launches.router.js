@@ -9,5 +9,5 @@ const launches_model_1 = require("../../models/launches.model");
 const launchesRouter = express_1.default.Router();
 exports.launchesRouter = launchesRouter;
 launchesRouter.get('/launches', (req, res) => {
-    return res.status(200).json(Array.from(launches_model_1.launches.values()));
+    return res.status(200).json((0, launches_model_1.getAllLaunches)());
 });
