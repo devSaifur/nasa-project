@@ -14,7 +14,7 @@ app.use((0, cors_1.default)({
 }));
 app.use((0, morgan_1.default)('combined'));
 app.use(express_1.default.json());
-// app.use(express.static('public'))
-app.use(planets_router_1.planetsRouter);
-app.use(launches_router_1.launchesRouter);
+app.use(express_1.default.static('public'));
+app.use('/planets', planets_router_1.planetsRouter);
+app.use('/launches', launches_router_1.launchesRouter);
 exports.default = app;

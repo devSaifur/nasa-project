@@ -15,9 +15,9 @@ app.use(
 app.use(morgan('combined'))
 
 app.use(express.json())
-// app.use(express.static('public'))
+app.use(express.static('public'))
 
-app.use(planetsRouter)
-app.use(launchesRouter)
+app.use('/planets', planetsRouter)
+app.use('/launches', launchesRouter)
 
 export default app

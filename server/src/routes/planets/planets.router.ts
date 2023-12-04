@@ -3,7 +3,7 @@ import { habitablePlanet } from '../../models/planets.model'
 
 const planetsRouter = express.Router()
 
-planetsRouter.get('/planets', (req, res) => {
+planetsRouter.get('/', (req, res) => {
   return res.status(200).json(habitablePlanet)
 })
 
