@@ -9,7 +9,7 @@ type Launch = {
   flightNumber: number
   mission: string
   rocket: string
-  launchDate: Date
+  launchDate: string
   destination: string
   customers: string[]
   upcoming: boolean

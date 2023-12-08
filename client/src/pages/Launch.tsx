@@ -1,4 +1,8 @@
-import { getPlanets } from '@/api/getPlanets'
+import { ReloadIcon } from '@radix-ui/react-icons'
+import { useRef, useState } from 'react'
+
+import { usePlanets } from '@/api/usePlanets'
+import { usePostLaunch } from '@/api/usePostLaunch'
 import { DatePicker } from '@/components/ui/DatePicker'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,19 +14,49 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useEffect, useState } from 'react'
 
 const Launch = () => {
-  const [planets, setPlanets] = useState([])
+  const [date, setDate] = useState<Date>()
+  const [mission, setMission] = useState('')
+  const [rocketType, setRocketType] = useState('Explorer IS1')
+  const [destination, setDestination] = useState('')
 
-  useEffect(() => {
-    const planets = async () => await getPlanets()
-    planets().then((res) => setPlanets(res))
-  }, [])
+  const successAudioRef = useRef<HTMLAudioElement>(null)
+  const abortAudioRef = useRef<HTMLAudioElement>(null)
 
-  console.log(planets)
+  const { planets, isLoadingPlanets } = usePlanets()
+  const { addLaunch, isLaunching } = usePostLaunch()
 
-  console.log(planets)
+  function handleSubmit() {
+    if (
+      date !== undefined &&
+      mission !== '' &&
+      rocketType !== '' &&
+      destination !== ''
+    ) {
+      addLaunch(
+        {
+          launchDate: date,
+          mission: mission,
+          rocket: rocketType,
+          destination: destination,
+        },
+        {
+          onSuccess: () => {
+            setDate(undefined)
+            setMission('')
+            setRocketType('Explorer IS1')
+            setDestination('')
+
+            successAudioRef.current?.play()
+          },
+          onError: () => {
+            abortAudioRef.current?.play()
+          },
+        }
+      )
+    }
+  }
 
   return (
     <div className="mx-auto mt-12 flex max-w-4xl flex-col gap-4 border-2 border-primary px-4 py-8 text-lg">
@@ -45,59 +79,73 @@ const Launch = () => {
         </ol>
       </div>
 
-      <div className="flex max-w-lg flex-col gap-2">
+      <div className="flex max-w-lg flex-col gap-2 text-base">
         <div className="flex items-center justify-between">
           <Label className="text-xl" htmlFor="title">
             Launch Date:
           </Label>
-
-          <DatePicker />
+          <DatePicker date={date} setDate={setDate} />
         </div>
+
         <div className="flex items-center justify-between">
           <Label className="text-xl" htmlFor="title">
             Mission Name:
           </Label>
-          <Input className="max-w-[240px]" />
+          <Input
+            value={mission}
+            onChange={(e) => setMission(e.target.value)}
+            className="max-w-[240px]"
+          />
         </div>
+
         <div className="flex items-center justify-between">
           <Label className="text-xl" htmlFor="title">
             Rocket Type:
           </Label>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select rocket" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="dark">Explorer IS1</SelectItem>
-              <SelectItem value="dark">Rocket 2</SelectItem>
-              <SelectItem value="dark">Rocket 3</SelectItem>
-            </SelectContent>
-          </Select>
+          <Input
+            value={rocketType}
+            onChange={(e) => setRocketType(e.target.value)}
+            className="max-w-[240px]"
+          />
         </div>
+
         <div className="flex items-center justify-between">
           <Label className="text-xl" htmlFor="title">
             Destination Exoplanet:
           </Label>
-          <Select>
+          <Select
+            value={destination}
+            onValueChange={(selectedDestination) =>
+              setDestination(selectedDestination)
+            }
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select planet" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="dark">Explorer IS1</SelectItem>
-              <SelectItem value="dark">Rocket 2</SelectItem>
-              <SelectItem value="dark">Rocket 3</SelectItem>
+              {planets?.map((planet) => (
+                <SelectItem key={planet.kepler_name} value={planet.kepler_name}>
+                  {planet.kepler_name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
       </div>
 
       <Button
-        className="w-56 border-green-400 font-semibold text-green-400 hover:bg-green-400"
+        onClick={handleSubmit}
+        disabled={isLaunching || isLoadingPlanets}
+        className="w-56 border-green-500 font-semibold text-green-500 delay-0 hover:bg-green-500"
         size="lg"
         variant="outline"
       >
+        {isLaunching && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
         Launch Mission
       </Button>
+
+      <audio ref={successAudioRef} src="/sound/success.mp3" />
+      <audio ref={abortAudioRef} src="/sound/abort.mp3" />
     </div>
   )
 }
