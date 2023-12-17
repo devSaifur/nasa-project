@@ -1,18 +1,24 @@
-import { createServer } from 'http'
-import app from './app'
+import { createServer } from 'node:http'
+import mongoose from 'mongoose'
+import 'dotenv/config'
 
+import app from './app'
 import { loadPlanetsData } from './models/planets.model'
 
 const PORT = process.env.PORT || 4000
+const MONGO_URI = process.env.MONGO_URI as string
 
 const server = createServer(app)
 
 async function startServer() {
   try {
-    await loadPlanetsData()
+    loadPlanetsData()
+    await mongoose.connect(MONGO_URI)
   } catch (error) {
-    console.log(error)
-    console.log('Failed to load planets data')
+    if (error instanceof Error) {
+      console.log(error.message)
+    }
+    console.log('Something went wrong!')
   }
 
   server.listen(PORT, () => {
@@ -21,3 +27,12 @@ async function startServer() {
 }
 
 startServer()
+
+mongoose.connection.once('open', () => {
+  console.log("You've successfully connected to MongoDB")
+})
+
+mongoose.connection.on('error', (error) => {
+  if (error instanceof Error) console.log(error.message)
+  console.log('Something went wrong!')
+})
