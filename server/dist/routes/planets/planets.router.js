@@ -8,6 +8,6 @@ const express_1 = __importDefault(require("express"));
 const planets_model_1 = require("../../models/planets.model");
 const planetsRouter = express_1.default.Router();
 exports.planetsRouter = planetsRouter;
-planetsRouter.get('/', (req, res) => {
-    return res.status(200).json(planets_model_1.habitablePlanet);
+planetsRouter.get('/', async (req, res) => {
+    return res.status(200).json(await (0, planets_model_1.getAllPlanets)());
 });

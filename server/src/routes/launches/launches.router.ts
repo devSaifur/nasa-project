@@ -8,8 +8,8 @@ import {
 
 const launchesRouter = express.Router()
 
-launchesRouter.get('/', (req, res) => {
-  return res.status(200).json(getAllLaunches())
+launchesRouter.get('/', async (req, res) => {
+  return res.status(200).json(await getAllLaunches())
 })
 
 launchesRouter.post('/', (req, res) => {

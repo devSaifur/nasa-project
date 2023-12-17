@@ -1,7 +1,6 @@
-import { createReadStream } from 'fs'
+import { createReadStream } from 'node:fs'
 import { parse } from 'csv-parse'
-
-let habitablePlanet: Planet[] = []
+import { planets } from './planets.mongo'
 
 function isHabitablePlanet(planet: Planet) {
   return (
@@ -21,22 +20,52 @@ function loadPlanetsData() {
           columns: true,
         })
       )
-      .on('data', (data) => {
+      .on('data', async (data) => {
         if (isHabitablePlanet(data)) {
-          habitablePlanet.push(data)
+          savePlanets(data)
         }
       })
       .on('error', (err) => {
         console.error(err)
         reject(err)
       })
-      .on('end', () => {
-        console.log(
-          `${habitablePlanet.length} habitable planets have been found`
-        )
+      .on('end', async () => {
+        const planetsLength = (await getAllPlanets()).length
+        console.log(`${planetsLength} habitable planets have been found`)
         resolve()
       })
   })
 }
 
-export { habitablePlanet, loadPlanetsData }
+async function getAllPlanets() {
+  return await planets.find(
+    {},
+    {
+      _id: 0,
+      __v: 0,
+    }
+  )
+}
+
+async function savePlanets(planet: Planet) {
+  try {
+    await planets.updateOne(
+      {
+        kepler_name: planet.kepler_name,
+      },
+      {
+        kepler_name: planet.kepler_name,
+      },
+      {
+        upsert: true,
+      }
+    )
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+    console.log('Something went wrong when saving planets to db!')
+  }
+}
+
+export { getAllPlanets, loadPlanetsData }
