@@ -1,32 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.abortLaunchById = exports.existLaunchWithId = exports.addNewLaunch = exports.getAllLaunches = void 0;
+exports.existLaunchWithId = exports.abortLaunchById = exports.scheduleNewLaunch = exports.getAllLaunches = void 0;
 const launches_mongo_1 = require("./launches.mongo");
-const launches = new Map();
-const launch = {
-    flightNumber: 100,
-    mission: 'Kepler Exploration X',
-    rocket: 'Explorer IS1',
-    launchDate: new Date('November 29, 2030'),
-    destination: 'Kepler-442 b',
-    customers: ['SpaceX', 'NASA'],
-    upcoming: true,
-    success: true,
-};
-let latestFlightNumber = 100;
-saveLaunch();
-async function saveLaunch() {
-    try {
-        await launches_mongo_1.launches.updateOne({ flightNumber: launch.flightNumber }, launch, {
-            upsert: true,
-        });
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            console.error(error.message);
-        }
-    }
-}
+const planets_mongo_1 = require("./planets.mongo");
+const DEFAULT_FLIGHT_NUMBER = 100;
 async function getAllLaunches() {
     try {
         const allLaunches = await launches_mongo_1.launches.find({}, { _id: 0, __v: 0 });
@@ -36,29 +13,62 @@ async function getAllLaunches() {
         return sortedLaunches;
     }
     catch (error) {
-        if (error instanceof Error) {
+        if (error instanceof Error)
             console.error(error.message);
-        }
         console.log('Something went wrong getting launches!');
     }
 }
 exports.getAllLaunches = getAllLaunches;
-function addNewLaunch(newLaunch) {
-    latestFlightNumber++;
-    launches.set(latestFlightNumber, Object.assign(Object.assign({}, newLaunch), { customers: ['SpaceX', 'NASA'], flightNumber: latestFlightNumber, success: true, upcoming: true }));
-    return newLaunch;
+async function scheduleNewLaunch(newLaunch) {
+    const latestFlightNumber = await getLatestFlightNumber();
+    if (!latestFlightNumber)
+        return;
+    const newFlightNumber = latestFlightNumber + 1;
+    const scheduledLaunch = Object.assign(Object.assign({}, newLaunch), { success: true, upcoming: true, customers: ['SpaceX', 'NASA'], flightNumber: newFlightNumber });
+    await saveLaunch(scheduledLaunch);
+    return scheduledLaunch;
 }
-exports.addNewLaunch = addNewLaunch;
-function existLaunchWithId(launchId) {
-    return launches.has(launchId);
-}
-exports.existLaunchWithId = existLaunchWithId;
-function abortLaunchById(launchId) {
-    const abortedLaunch = launches.get(launchId);
-    if (abortedLaunch) {
-        abortedLaunch.success = false;
-        abortedLaunch.upcoming = false;
+exports.scheduleNewLaunch = scheduleNewLaunch;
+async function abortLaunchById(launchId) {
+    try {
+        const res = await launches_mongo_1.launches.updateOne({
+            flightNumber: launchId,
+        }, {
+            success: false,
+            upcoming: false,
+        });
+        return res;
     }
-    return abortedLaunch;
+    catch (error) {
+        if (error instanceof Error)
+            console.error(error.message);
+        console.log('Something went wrong aborting launch!');
+    }
 }
 exports.abortLaunchById = abortLaunchById;
+async function existLaunchWithId(launchId) {
+    return await launches_mongo_1.launches.findOne({ flightNumber: launchId });
+}
+exports.existLaunchWithId = existLaunchWithId;
+async function saveLaunch(newLaunch) {
+    try {
+        const planet = await planets_mongo_1.planets.findOne({ kepler_name: newLaunch.destination });
+        if (!planet)
+            throw new Error('No matching planet found!');
+        await launches_mongo_1.launches.findOneAndUpdate({ flightNumber: newLaunch.flightNumber }, newLaunch, {
+            upsert: true,
+        });
+    }
+    catch (error) {
+        if (error instanceof Error)
+            console.error(error.message);
+        console.log('Something went wrong saving launch!');
+    }
+}
+async function getLatestFlightNumber() {
+    const latestLaunch = await launches_mongo_1.launches.findOne().sort('-flightNumber');
+    if (!latestLaunch)
+        return DEFAULT_FLIGHT_NUMBER;
+    const latestFlightNumber = latestLaunch.flightNumber;
+    return latestFlightNumber;
+}

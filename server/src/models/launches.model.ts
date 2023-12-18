@@ -1,33 +1,9 @@
 import { launches as launchesDB } from './launches.mongo'
+import { planets } from './planets.mongo'
 
-const launches: Map<number, Launch> = new Map()
-const launch: Launch = {
-  flightNumber: 100,
-  mission: 'Kepler Exploration X',
-  rocket: 'Explorer IS1',
-  launchDate: new Date('November 29, 2030'),
-  destination: 'Kepler-442 b',
-  customers: ['SpaceX', 'NASA'],
-  upcoming: true,
-  success: true,
-}
-let latestFlightNumber = 100
+const DEFAULT_FLIGHT_NUMBER = 100
 
-saveLaunch()
-
-async function saveLaunch() {
-  try {
-    await launchesDB.updateOne({ flightNumber: launch.flightNumber }, launch, {
-      upsert: true,
-    })
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message)
-    }
-  }
-}
-
-async function getAllLaunches() {
+export async function getAllLaunches() {
   try {
     const allLaunches: Launch[] = await launchesDB.find({}, { _id: 0, __v: 0 })
     const sortedLaunches = allLaunches.sort((a, b) => {
@@ -35,40 +11,71 @@ async function getAllLaunches() {
     })
     return sortedLaunches
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message)
-    }
+    if (error instanceof Error) console.error(error.message)
     console.log('Something went wrong getting launches!')
   }
 }
 
-function addNewLaunch(newLaunch: Launch) {
-  latestFlightNumber++
+export async function scheduleNewLaunch(newLaunch: Launch) {
+  const latestFlightNumber = await getLatestFlightNumber()
+  if (!latestFlightNumber) return
+  const newFlightNumber = latestFlightNumber + 1
 
-  launches.set(latestFlightNumber, {
+  const scheduledLaunch = {
     ...newLaunch,
-    customers: ['SpaceX', 'NASA'],
-    flightNumber: latestFlightNumber,
     success: true,
     upcoming: true,
-  })
-
-  return newLaunch
-}
-
-function existLaunchWithId(launchId: number) {
-  return launches.has(launchId)
-}
-
-function abortLaunchById(launchId: number) {
-  const abortedLaunch = launches.get(launchId)
-
-  if (abortedLaunch) {
-    abortedLaunch.success = false
-    abortedLaunch.upcoming = false
+    customers: ['SpaceX', 'NASA'],
+    flightNumber: newFlightNumber,
   }
-
-  return abortedLaunch
+  await saveLaunch(scheduledLaunch)
+  return scheduledLaunch
 }
 
-export { getAllLaunches, addNewLaunch, existLaunchWithId, abortLaunchById }
+export async function abortLaunchById(launchId: number) {
+  try {
+    const res = await launchesDB.updateOne(
+      {
+        flightNumber: launchId,
+      },
+      {
+        success: false,
+        upcoming: false,
+      }
+    )
+    return res
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message)
+    console.log('Something went wrong aborting launch!')
+  }
+}
+
+export async function existLaunchWithId(launchId: number) {
+  return await launchesDB.findOne({ flightNumber: launchId })
+}
+
+async function saveLaunch(newLaunch: Launch) {
+  try {
+    const planet = await planets.findOne({ kepler_name: newLaunch.destination })
+    if (!planet) throw new Error('No matching planet found!')
+
+    await launchesDB.findOneAndUpdate(
+      { flightNumber: newLaunch.flightNumber },
+      newLaunch,
+      {
+        upsert: true,
+      }
+    )
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message)
+    console.log('Something went wrong saving launch!')
+  }
+}
+
+async function getLatestFlightNumber() {
+  const latestLaunch = await launchesDB.findOne().sort('-flightNumber')
+  if (!latestLaunch) return DEFAULT_FLIGHT_NUMBER
+
+  const latestFlightNumber = latestLaunch.flightNumber
+  return latestFlightNumber
+}

@@ -1,7 +1,7 @@
 import express from 'express'
 import {
   getAllLaunches,
-  addNewLaunch,
+  scheduleNewLaunch,
   existLaunchWithId,
   abortLaunchById,
 } from '../../models/launches.model'
@@ -12,9 +12,8 @@ launchesRouter.get('/', async (req, res) => {
   return res.status(200).json(await getAllLaunches())
 })
 
-launchesRouter.post('/', (req, res) => {
+launchesRouter.post('/', async (req, res) => {
   const newLaunch = req.body
-
   if (
     !newLaunch.mission ||
     !newLaunch.rocket ||
@@ -23,16 +22,15 @@ launchesRouter.post('/', (req, res) => {
   ) {
     return res.status(400).json({ error: 'Missing required launch property' })
   }
-
   newLaunch.launchDate = new Date(newLaunch.launchDate)
   if (isNaN(newLaunch.launchDate)) {
     return res.status(400).json({ error: 'Invalid launch date' })
   }
 
-  return res.status(201).json(addNewLaunch(newLaunch))
+  return res.status(201).json(await scheduleNewLaunch(newLaunch))
 })
 
-launchesRouter.delete('/:id', (req, res) => {
+launchesRouter.delete('/:id', async (req, res) => {
   const launchId = req.params.id
 
   const launchExist = existLaunchWithId(Number(launchId))
@@ -40,8 +38,17 @@ launchesRouter.delete('/:id', (req, res) => {
     res.status(400).json({ error: 'Launch does not exist' })
   }
 
-  const abortedLaunch = abortLaunchById(Number(launchId))
-  return res.status(200).json(abortedLaunch)
+  try {
+    const abortRes = await abortLaunchById(Number(launchId))
+    if (abortRes?.acknowledged) {
+      return res.status(200).json({ ok: true })
+    }
+  } catch (err) {
+    if (err instanceof Error) {
+      return res.status(400).json({ error: err.message })
+    }
+    console.log(err)
+  }
 })
 
 export { launchesRouter }

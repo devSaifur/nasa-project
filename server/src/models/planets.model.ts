@@ -2,16 +2,17 @@ import { createReadStream } from 'node:fs'
 import { parse } from 'csv-parse'
 import { planets } from './planets.mongo'
 
-function isHabitablePlanet(planet: Planet) {
-  return (
-    planet['koi_disposition'] === 'CONFIRMED' &&
-    planet['koi_insol'] > 0.36 &&
-    planet['koi_insol'] < 1.11 &&
-    planet['koi_prad'] < 1.6
+export async function getAllPlanets() {
+  return await planets.find(
+    {},
+    {
+      _id: 0,
+      __v: 0,
+    }
   )
 }
 
-function loadPlanetsData() {
+export function loadPlanetsData() {
   return new Promise<void>((resolve, reject) => {
     createReadStream('./data/kepler_data.csv')
       .pipe(
@@ -21,9 +22,7 @@ function loadPlanetsData() {
         })
       )
       .on('data', async (data) => {
-        if (isHabitablePlanet(data)) {
-          savePlanets(data)
-        }
+        if (isHabitablePlanet(data)) savePlanets(data)
       })
       .on('error', (err) => {
         console.error(err)
@@ -37,13 +36,12 @@ function loadPlanetsData() {
   })
 }
 
-async function getAllPlanets() {
-  return await planets.find(
-    {},
-    {
-      _id: 0,
-      __v: 0,
-    }
+function isHabitablePlanet(planet: Planet) {
+  return (
+    planet['koi_disposition'] === 'CONFIRMED' &&
+    planet['koi_insol'] > 0.36 &&
+    planet['koi_insol'] < 1.11 &&
+    planet['koi_prad'] < 1.6
   )
 }
 
@@ -61,11 +59,7 @@ async function savePlanets(planet: Planet) {
       }
     )
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message)
-    }
+    if (error instanceof Error) console.error(error.message)
     console.log('Something went wrong when saving planets to db!')
   }
 }
-
-export { getAllPlanets, loadPlanetsData }

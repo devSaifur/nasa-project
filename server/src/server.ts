@@ -15,9 +15,7 @@ async function startServer() {
     loadPlanetsData()
     await mongoose.connect(MONGO_URI)
   } catch (error) {
-    if (error instanceof Error) {
-      console.log(error.message)
-    }
+    if (error instanceof Error) console.log(error.message)
     console.log('Something went wrong!')
   }
 

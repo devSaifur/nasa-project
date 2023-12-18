@@ -11,7 +11,7 @@ exports.launchesRouter = launchesRouter;
 launchesRouter.get('/', async (req, res) => {
     return res.status(200).json(await (0, launches_model_1.getAllLaunches)());
 });
-launchesRouter.post('/', (req, res) => {
+launchesRouter.post('/', async (req, res) => {
     const newLaunch = req.body;
     if (!newLaunch.mission ||
         !newLaunch.rocket ||
@@ -23,14 +23,24 @@ launchesRouter.post('/', (req, res) => {
     if (isNaN(newLaunch.launchDate)) {
         return res.status(400).json({ error: 'Invalid launch date' });
     }
-    return res.status(201).json((0, launches_model_1.addNewLaunch)(newLaunch));
+    return res.status(201).json(await (0, launches_model_1.scheduleNewLaunch)(newLaunch));
 });
-launchesRouter.delete('/:id', (req, res) => {
+launchesRouter.delete('/:id', async (req, res) => {
     const launchId = req.params.id;
     const launchExist = (0, launches_model_1.existLaunchWithId)(Number(launchId));
     if (!launchExist) {
         res.status(400).json({ error: 'Launch does not exist' });
     }
-    const abortedLaunch = (0, launches_model_1.abortLaunchById)(Number(launchId));
-    return res.status(200).json(abortedLaunch);
+    try {
+        const abortRes = await (0, launches_model_1.abortLaunchById)(Number(launchId));
+        if (abortRes === null || abortRes === void 0 ? void 0 : abortRes.acknowledged) {
+            return res.status(200).json({ ok: true });
+        }
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            return res.status(400).json({ error: err.message });
+        }
+        console.log(err);
+    }
 });
