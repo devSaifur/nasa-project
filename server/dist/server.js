@@ -17,9 +17,8 @@ async function startServer() {
         await mongoose_1.default.connect(MONGO_URI);
     }
     catch (error) {
-        if (error instanceof Error) {
+        if (error instanceof Error)
             console.log(error.message);
-        }
         console.log('Something went wrong!');
     }
     server.listen(PORT, () => {

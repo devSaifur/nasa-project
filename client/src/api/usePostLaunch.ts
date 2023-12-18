@@ -12,7 +12,6 @@ function usePostLaunch() {
     mutationKey: ['Add-Launch'],
     mutationFn: async (newLaunch: NewLaunch) => {
       await axios.post(`${API_URL}/launches`, newLaunch)
-      console.log(newLaunch)
     },
   })
 

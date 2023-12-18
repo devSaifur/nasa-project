@@ -16,27 +16,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/launch',
-        element: (
-          <Suspense>
-            <Launch />
-          </Suspense>
-        ),
+        element: <Launch />,
       },
       {
         path: '/upcoming',
-        element: (
-          <Suspense>
-            <Upcoming />
-          </Suspense>
-        ),
+        element: <Upcoming />,
       },
       {
         path: '/history',
-        element: (
-          <Suspense>
-            <History />
-          </Suspense>
-        ),
+        element: <History />,
       },
     ],
   },
