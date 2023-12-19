@@ -6,10 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.launchesRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const launches_model_1 = require("../../models/launches.model");
+const query_1 = require("../../services/query");
 const launchesRouter = express_1.default.Router();
 exports.launchesRouter = launchesRouter;
 launchesRouter.get('/', async (req, res) => {
-    return res.status(200).json(await (0, launches_model_1.getAllLaunches)());
+    const { limit, skip } = (0, query_1.getPagination)(req.query);
+    const allLaunches = await (0, launches_model_1.getAllLaunches)(skip, limit);
+    return res.status(200).json(allLaunches);
 });
 launchesRouter.post('/', async (req, res) => {
     const newLaunch = req.body;

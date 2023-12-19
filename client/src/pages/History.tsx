@@ -5,20 +5,20 @@ const History = () => {
   const { launches } = useGetLaunches()
 
   return (
-    <div className="mx-auto flex max-w-4xl flex-col gap-12 pt-24">
-      <div>
+    <div className="mx-auto flex max-w-6xl flex-col gap-12 py-24">
+      <div className="text-2xl">
         <p>
-          History of mission launches including SpaceX launches starting from
+          * History of mission launches including SpaceX launches starting from
           the year 2006.
         </p>
       </div>
 
-      <table>
+      <table className="text-lg">
         <thead className="font-bold text-blue-200">
           <tr>
-            <td></td>
-            <td>No.</td>
-            <td>Date</td>
+            <td className="pr-6"></td>
+            <td className="pr-6">No.</td>
+            <td className="pr-28">Date</td>
             <td>Mission </td>
             <td>Rocket</td>
             <td>Customers</td>
@@ -33,7 +33,9 @@ const History = () => {
               <td>{formatDate(launch.launchDate)}</td>
               <td>{launch.mission}</td>
               <td>{launch.rocket}</td>
-              <td>{`${launch.customers[0]} & ${launch.customers[1]}`}</td>
+              <td>
+                {launch.customers[0] ? launch.customers[0] : 'unavailable'}
+              </td>
             </tr>
           </tbody>
         ))}

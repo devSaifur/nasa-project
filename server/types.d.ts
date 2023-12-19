@@ -7,11 +7,22 @@ type Planet = {
 
 type Launch = {
   flightNumber: number
-  mission: string
+  mission?: string
   rocket: string
   launchDate: Date
-  destination: string
   customers: string[]
   upcoming: boolean
   success: boolean
+  destination?: string
+}
+
+type FindLaunch = {
+  flightNumber: number
+  mission?: string
+  rocket?: string
+}
+
+type QueryParams = {
+  page: number
+  limit: number
 }

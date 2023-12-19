@@ -6,7 +6,7 @@ const Logo = () => {
       <Link to="/launch">
         <img src="/favicon.png" alt="Logo" />
       </Link>
-      <h1 className="text-2xl font-extrabold">NASA Mission Control</h1>
+      <h1 className="text-3xl font-bold">NASA Mission Control</h1>
     </div>
   )
 }

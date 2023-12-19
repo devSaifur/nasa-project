@@ -9,14 +9,14 @@ const Upcoming = () => {
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-12 pt-24">
-      <div>
+      <div className="text-2xl">
         <p>
-          Upcoming missions including both SpaceX launches and newly scheduled
+          * Upcoming missions including both SpaceX launches and newly scheduled
           Space X rockets.
         </p>
       </div>
 
-      <table>
+      <table className="text-lg">
         <thead className="font-bold text-blue-200">
           <tr>
             <th></th>
@@ -31,7 +31,8 @@ const Upcoming = () => {
         <tbody className="text-center">
           {launches?.map(
             (launch) =>
-              launch.upcoming && (
+              launch.upcoming &&
+              launch.destination && (
                 <tr key={launch.flightNumber}>
                   <td>
                     <button

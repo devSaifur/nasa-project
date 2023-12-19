@@ -59,9 +59,9 @@ const Launch = () => {
   }
 
   return (
-    <div className="mx-auto mt-12 flex max-w-4xl flex-col gap-4 border-2 border-primary px-4 py-8 text-lg">
-      <div className="space-y-4">
-        <h1 className="font-bold">
+    <div className="mx-auto mt-12 flex max-w-4xl flex-col gap-4 rounded-lg border-2 border-primary px-12 py-16 text-xl">
+      <div className="space-y-4 text-xl">
+        <h1>
           Schedule a mission launch for interstellar travel to one of the Kepler
           Exoplanets
         </h1>
@@ -71,7 +71,7 @@ const Launch = () => {
         </p>
       </div>
 
-      <div className="space-y-2 pl-8">
+      <div className="space-y-2 pl-8 text-xl">
         <ol>* Planets radius &lt; 1.6 times earth radius.</ol>
         <ol>
           * Effective stellar flux &gt; 0.36 times earth's value and &lt; 1.11
@@ -81,14 +81,14 @@ const Launch = () => {
 
       <div className="flex max-w-lg flex-col gap-2 text-base">
         <div className="flex items-center justify-between">
-          <Label className="text-xl" htmlFor="title">
+          <Label className="text-lg" htmlFor="title">
             Launch Date:
           </Label>
           <DatePicker date={date} setDate={setDate} />
         </div>
 
         <div className="flex items-center justify-between">
-          <Label className="text-xl" htmlFor="title">
+          <Label className="text-lg" htmlFor="title">
             Mission Name:
           </Label>
           <Input
@@ -99,7 +99,7 @@ const Launch = () => {
         </div>
 
         <div className="flex items-center justify-between">
-          <Label className="text-xl" htmlFor="title">
+          <Label className="text-lg" htmlFor="title">
             Rocket Type:
           </Label>
           <Input
@@ -110,7 +110,7 @@ const Launch = () => {
         </div>
 
         <div className="flex items-center justify-between">
-          <Label className="text-xl" htmlFor="title">
+          <Label className="text-lg" htmlFor="title">
             Destination Exoplanet:
           </Label>
           <Select
@@ -136,7 +136,7 @@ const Launch = () => {
       <Button
         onClick={handleSubmit}
         disabled={isLaunching || isLoadingPlanets}
-        className="w-56 border-green-500 font-semibold text-green-500 delay-0 hover:bg-green-500"
+        className="hover:bg-button text-button border-button w-56 rounded-none font-semibold shadow-2xl delay-0"
         size="lg"
         variant="outline"
       >

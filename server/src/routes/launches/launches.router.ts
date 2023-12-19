@@ -5,11 +5,15 @@ import {
   existLaunchWithId,
   abortLaunchById,
 } from '../../models/launches.model'
+import { getPagination } from '../../services/query'
 
 const launchesRouter = express.Router()
 
 launchesRouter.get('/', async (req, res) => {
-  return res.status(200).json(await getAllLaunches())
+  const { limit, skip } = getPagination(req.query as any)
+  const allLaunches = await getAllLaunches(skip, limit)
+
+  return res.status(200).json(allLaunches)
 })
 
 launchesRouter.post('/', async (req, res) => {
