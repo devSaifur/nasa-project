@@ -17,6 +17,4 @@ app.use('/v1', api_1.api);
 // app.get('/*', (req, res) => {
 //   res.sendFile(path.join(publicPath, 'index.html'))
 // })
-console.log('does it work?');
-console.log('nice');
 exports.default = app;
