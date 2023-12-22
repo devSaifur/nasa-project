@@ -15,11 +15,19 @@ jobs:
         node-version: [18.x, 20.x]
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Uses NodeJS ${{matrix.node-version}}
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node.js v20
         uses: actions/setup-node@v3
         with:
-          node-version: ${{matrix.node-version}}
-          cache: 'npm'
-      - run: npm run client
-      - run: npm run server
+          node-version: 20
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: false
+
+      - run: pnpm run client
+      - run: pnpm run server
