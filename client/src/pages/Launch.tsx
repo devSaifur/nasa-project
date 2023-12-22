@@ -136,7 +136,7 @@ const Launch = () => {
       <Button
         onClick={handleSubmit}
         disabled={isLaunching || isLoadingPlanets}
-        className="hover:bg-button text-button border-button w-56 rounded-none font-semibold shadow-2xl delay-0"
+        className="w-56 rounded-none border-button font-semibold text-button shadow-2xl delay-0 hover:bg-button"
         size="lg"
         variant="outline"
       >
