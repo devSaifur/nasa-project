@@ -20,6 +20,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{matrix.node-version}}
-          cache: 'pnpm'
-      - run: pnpm run client
-      - run: pnpm run server
+          cache: 'npm'
+      - run: npm run client
+      - run: npm run server
