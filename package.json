@@ -4,18 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "client": "cd client && pnpm run build",
-    "server": "cd server && pnpm run deploy",
-    "dev": "concurrently --kill-others-on-fail \"pnpm run client\" \"pnpm run server\"",
+    "install-client": "pnpm --dir ./client install",
+    "install-server": "pnpm --dir ./server install",
+    "install": "pnpm install-client && pnpm install-server",
+    "client": "pnpm --dir ./client dev",
+    "server": "pnpm --dir ./server start",
+    "build": "pnpm --dir ./client build",
+    "deploy": "pnpm run build && pnpm run server",
+    "cluster": "pnpm --dir ./server cluster",
+    "deploy-cluster": "pnpm run build && pnpm run cluster",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "devSaifur",
-  "license": "ISC",
-  "devDependencies": {
-    "concurrently": "^8.2.2"
-  },
-  "dependencies": {
-    "mongoose": "^8.0.3"
-  }
+  "license": "ISC"
 }
