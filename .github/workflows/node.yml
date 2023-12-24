@@ -10,7 +10,7 @@ jobs:
   build:
     env:
       CI: true
-      MONGO_URL: mongodb://localhost/nasa-project
+      MONGO_URI: mongodb://localhost/nasa-project
     runs-on: ubuntu-latest
     strategy:
       matrix:
