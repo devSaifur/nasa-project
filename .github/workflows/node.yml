@@ -39,4 +39,3 @@ jobs:
 
       - run: pnpm run install
       - run: pnpm run build
-      - run: pnpm run server
