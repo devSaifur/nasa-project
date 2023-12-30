@@ -5,7 +5,7 @@ const Nav = () => {
     <ul className="flex items-center gap-8 text-xl font-bold">
       <li className="space-x-1">
         <span>🛸</span>
-        <Link to="/" className="underline-offset-4 hover:underline">
+        <Link to="/launch" className="underline-offset-4 hover:underline">
           Launch
         </Link>
       </li>

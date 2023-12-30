@@ -1,30 +1,38 @@
 import { Suspense, lazy } from 'react'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
-const AppLayout = lazy(() => import('./components/AppLayout'))
+import AppLayout from './components/AppLayout'
 const Launch = lazy(() => import('./pages/Launch'))
 const Upcoming = lazy(() => import('./pages/Upcoming'))
 const History = lazy(() => import('./pages/History'))
 
 const router = createBrowserRouter([
   {
-    element: (
-      <Suspense>
-        <AppLayout />
-      </Suspense>
-    ),
+    element: <AppLayout />,
     children: [
       {
         path: '/launch',
-        element: <Launch />,
+        element: (
+          <Suspense>
+            <Launch />
+          </Suspense>
+        ),
       },
       {
         path: '/upcoming',
-        element: <Upcoming />,
+        element: (
+          <Suspense>
+            <Upcoming />
+          </Suspense>
+        ),
       },
       {
         path: '/history',
-        element: <History />,
+        element: (
+          <Suspense>
+            <History />
+          </Suspense>
+        ),
       },
     ],
   },
