@@ -1,4 +1,5 @@
 import { createServer } from 'node:http'
+import 'dotenv/config'
 
 import app from './app'
 import { connectDB } from './services/mongo'

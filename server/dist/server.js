@@ -16,12 +16,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "node:http", "./app", "./services/mongo", "./models/planets.model", "./models/launches.model"], factory);
+        define(["require", "exports", "node:http", "dotenv/config", "./app", "./services/mongo", "./models/planets.model", "./models/launches.model"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     const node_http_1 = require("node:http");
+    require("dotenv/config");
     const app_1 = __importDefault(require("./app"));
     const mongo_1 = require("./services/mongo");
     const planets_model_1 = require("./models/planets.model");
