@@ -40,9 +40,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                     console.log(error.message);
                 console.log('Something went wrong starting server!');
             }
-            server.listen(PORT, () => {
-                console.log(`Server is running on port ${PORT}`);
-            });
+            finally {
+                server.listen(PORT, () => {
+                    console.log(`Server is running on port ${PORT}`);
+                });
+            }
         });
     }
     startServer();
