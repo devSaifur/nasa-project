@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     const mongo_1 = require("./services/mongo");
     const planets_model_1 = require("./models/planets.model");
     const launches_model_1 = require("./models/launches.model");
-    const PORT = process.env.PORT || 4000;
+    const PORT = process.env.PORT || 3000;
     const server = (0, node_http_1.createServer)(app_1.default);
     function startServer() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -41,12 +41,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                     console.log(error.message);
                 console.log('Something went wrong starting server!');
             }
-            finally {
-                server.listen(PORT, () => {
-                    console.log(`Server is running on port ${PORT}`);
-                });
-            }
         });
     }
-    startServer();
+    startServer().then(() => {
+        server.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    });
 });
