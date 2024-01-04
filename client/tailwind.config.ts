@@ -16,6 +16,9 @@ module.exports = {
       },
     },
     extend: {
+      backgroundImage: {
+        primaryBG: 'url(/img/background.jpg)',
+      },
       colors: {
         primary: '#26dafd',
         button: '#00ff00',
