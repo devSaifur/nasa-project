@@ -3,7 +3,7 @@ import 'dotenv/config'
 
 const MONGO_URI = process.env.MONGO_URI as string
 
-async function connectDB() {
+export async function connectDB() {
   await mongoose.connect(MONGO_URI)
 }
 
@@ -16,4 +16,9 @@ mongoose.connection.on('error', (error) => {
   console.log('Something went wrong when connecting to DB!')
 })
 
-export { connectDB }
+export async function mongoConnect() {
+  await mongoose.connect(MONGO_URI)
+}
+export async function mongoDisconnect() {
+  await mongoose.disconnect()
+}

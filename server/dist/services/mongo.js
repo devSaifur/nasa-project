@@ -21,7 +21,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.connectDB = void 0;
+    exports.mongoDisconnect = exports.mongoConnect = exports.connectDB = void 0;
     const mongoose_1 = __importDefault(require("mongoose"));
     require("dotenv/config");
     const MONGO_URI = process.env.MONGO_URI;
@@ -39,4 +39,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             console.error(error.message);
         console.log('Something went wrong when connecting to DB!');
     });
+    function mongoConnect() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield mongoose_1.default.connect(MONGO_URI);
+        });
+    }
+    exports.mongoConnect = mongoConnect;
+    function mongoDisconnect() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield mongoose_1.default.disconnect();
+        });
+    }
+    exports.mongoDisconnect = mongoDisconnect;
 });

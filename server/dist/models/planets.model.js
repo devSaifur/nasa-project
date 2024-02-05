@@ -73,17 +73,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     function savePlanets(planet) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield planets_mongo_1.planets.updateOne({
+                yield planets_mongo_1.planets
+                    .updateOne({
                     kepler_name: planet.kepler_name,
                 }, {
                     kepler_name: planet.kepler_name,
                 }, {
                     upsert: true,
-                });
+                })
+                    .exec();
             }
             catch (error) {
                 if (error instanceof Error)
-                    console.error(error.message);
+                    console.error(error.stack);
                 console.log('Something went wrong when saving planets to db!');
             }
         });
