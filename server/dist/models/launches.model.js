@@ -72,7 +72,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     .find({}, { _id: 0, __v: 0 })
                     .sort({ flightNumber: 1 })
                     .skip(skip)
-                    .limit(limit));
+                    .limit(limit)
+                    .exec());
                 const sortedLaunches = allLaunches.sort((a, b) => {
                     return a.flightNumber - b.flightNumber;
                 });
@@ -80,7 +81,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
             catch (error) {
                 if (error instanceof Error)
-                    console.error(error.message);
+                    console.error(error.stack);
                 console.log('Something went wrong getting launches!');
             }
         });
@@ -88,35 +89,47 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     exports.getAllLaunches = getAllLaunches;
     function scheduleNewLaunch(newLaunch) {
         return __awaiter(this, void 0, void 0, function* () {
-            const planet = yield planets_mongo_1.planets.findOne({
-                kepler_name: newLaunch.destination,
-            });
-            if (!planet)
-                throw new Error('No matching planet found!');
-            const latestFlightNumber = yield getLatestFlightNumber();
-            if (!latestFlightNumber)
-                return;
-            const newFlightNumber = latestFlightNumber + 1;
-            const scheduledLaunch = Object.assign(Object.assign({}, newLaunch), { success: true, upcoming: true, customers: ['SpaceX', 'NASA'], flightNumber: newFlightNumber });
-            yield saveLaunch(scheduledLaunch);
-            return scheduledLaunch;
+            try {
+                const planet = yield planets_mongo_1.planets
+                    .findOne({
+                    kepler_name: newLaunch.destination,
+                })
+                    .exec();
+                if (!planet)
+                    throw new Error('No matching planet found!');
+                const latestFlightNumber = yield getLatestFlightNumber();
+                if (!latestFlightNumber)
+                    return;
+                const newFlightNumber = latestFlightNumber + 1;
+                const scheduledLaunch = Object.assign(Object.assign({}, newLaunch), { success: true, upcoming: true, customers: ['SpaceX', 'NASA'], flightNumber: newFlightNumber });
+                yield saveLaunch(scheduledLaunch);
+                return scheduledLaunch;
+            }
+            catch (err) {
+                if (err instanceof Error) {
+                    console.error(err.stack);
+                }
+                console.log(err);
+            }
         });
     }
     exports.scheduleNewLaunch = scheduleNewLaunch;
     function abortLaunchById(launchId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const res = yield launches_mongo_1.launches.updateOne({
+                const res = yield launches_mongo_1.launches
+                    .updateOne({
                     flightNumber: launchId,
                 }, {
                     success: false,
                     upcoming: false,
-                });
+                })
+                    .exec();
                 return res;
             }
             catch (error) {
                 if (error instanceof Error)
-                    console.error(error.message);
+                    console.error(error.stack);
                 console.log('Something went wrong aborting launch!');
             }
         });
@@ -173,21 +186,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             catch (error) {
                 if ((0, axios_1.isAxiosError)(error)) {
                     console.error(error.message);
-                    console.log('Something went wrong when saving launches to DB!');
                 }
+                console.log('Something went wrong when saving launches to DB!');
             }
         });
     }
     function saveLaunch(newLaunch) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield launches_mongo_1.launches.findOneAndUpdate({ flightNumber: newLaunch.flightNumber }, newLaunch, {
+                yield launches_mongo_1.launches
+                    .findOneAndUpdate({ flightNumber: newLaunch.flightNumber }, newLaunch, {
                     upsert: true,
-                });
+                })
+                    .exec();
             }
             catch (error) {
                 if (error instanceof Error)
-                    console.error(error.message);
+                    console.error(error.stack);
                 console.log('Something went wrong saving launch!');
             }
         });
@@ -199,11 +214,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     }
     function getLatestFlightNumber() {
         return __awaiter(this, void 0, void 0, function* () {
-            const latestLaunch = yield launches_mongo_1.launches.findOne().sort('-flightNumber');
-            if (!latestLaunch)
-                return DEFAULT_FLIGHT_NUMBER;
-            const latestFlightNumber = latestLaunch.flightNumber;
-            return latestFlightNumber;
+            try {
+                const latestLaunch = yield launches_mongo_1.launches.findOne().sort('-flightNumber').exec();
+                if (!latestLaunch)
+                    return DEFAULT_FLIGHT_NUMBER;
+                const latestFlightNumber = latestLaunch.flightNumber;
+                return latestFlightNumber;
+            }
+            catch (err) {
+                if (err instanceof Error)
+                    console.error(err.stack);
+                console.log(err);
+            }
         });
     }
 });

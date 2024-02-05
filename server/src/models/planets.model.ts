@@ -3,13 +3,21 @@ import { parse } from 'csv-parse'
 import { planets } from './planets.mongo'
 
 export async function getAllPlanets() {
-  return await planets.find(
-    {},
-    {
-      _id: 0,
-      __v: 0,
-    }
-  )
+  try {
+    const res = await planets
+      .find(
+        {},
+        {
+          _id: 0,
+          __v: 0,
+        }
+      )
+      .exec()
+    return res
+  } catch (err) {
+    if (err instanceof Error) console.error(err.stack)
+    console.log(err)
+  }
 }
 
 export function loadPlanetsData() {
@@ -29,7 +37,7 @@ export function loadPlanetsData() {
         reject(err)
       })
       .on('end', async () => {
-        const planetsLength = (await getAllPlanets()).length
+        const planetsLength = await getAllPlanets().then((data) => data?.length)
         console.log(`${planetsLength} habitable planets have been found`)
         resolve()
       })
@@ -47,19 +55,21 @@ function isHabitablePlanet(planet: Planet) {
 
 async function savePlanets(planet: Planet) {
   try {
-    await planets.updateOne(
-      {
-        kepler_name: planet.kepler_name,
-      },
-      {
-        kepler_name: planet.kepler_name,
-      },
-      {
-        upsert: true,
-      }
-    )
+    await planets
+      .updateOne(
+        {
+          kepler_name: planet.kepler_name,
+        },
+        {
+          kepler_name: planet.kepler_name,
+        },
+        {
+          upsert: true,
+        }
+      )
+      .exec()
   } catch (error) {
-    if (error instanceof Error) console.error(error.message)
+    if (error instanceof Error) console.error(error.stack)
     console.log('Something went wrong when saving planets to db!')
   }
 }

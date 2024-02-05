@@ -24,10 +24,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     const planets_mongo_1 = require("./planets.mongo");
     function getAllPlanets() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield planets_mongo_1.planets.find({}, {
-                _id: 0,
-                __v: 0,
-            });
+            try {
+                const res = yield planets_mongo_1.planets
+                    .find({}, {
+                    _id: 0,
+                    __v: 0,
+                })
+                    .exec();
+                return res;
+            }
+            catch (err) {
+                if (err instanceof Error)
+                    console.error(err.stack);
+                console.log(err);
+            }
         });
     }
     exports.getAllPlanets = getAllPlanets;
@@ -47,7 +57,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 reject(err);
             })
                 .on('end', () => __awaiter(this, void 0, void 0, function* () {
-                const planetsLength = (yield getAllPlanets()).length;
+                const planetsLength = yield getAllPlanets().then((data) => data === null || data === void 0 ? void 0 : data.length);
                 console.log(`${planetsLength} habitable planets have been found`);
                 resolve();
             }));

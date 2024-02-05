@@ -1,10 +1,8 @@
 import express from 'express'
-import { getAllPlanets } from '../../models/planets.model'
+import { httpGetAllPlanets } from './planets.controller'
 
 const planetsRouter = express.Router()
 
-planetsRouter.get('/', async (req, res) => {
-  return res.status(200).json(await getAllPlanets())
-})
+planetsRouter.get('/', httpGetAllPlanets)
 
 export { planetsRouter }
