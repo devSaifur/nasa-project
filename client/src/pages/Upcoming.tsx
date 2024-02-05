@@ -8,7 +8,7 @@ const Upcoming = () => {
   const { abortLaunch } = useAbortLaunch()
 
   return (
-    <div className="mx-auto flex max-w-4xl flex-col gap-12 pt-24">
+    <div className="mx-auto flex max-w-4xl flex-col gap-12 py-24">
       <div className="text-2xl">
         <p>
           * Upcoming missions including both SpaceX launches and newly scheduled
