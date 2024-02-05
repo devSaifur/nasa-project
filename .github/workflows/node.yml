@@ -38,4 +38,5 @@ jobs:
           mongodb-version: ${{ matrix.mongodb-version }}
 
       - run: pnpm run install
+      - run: pnpm run test
       - run: pnpm run build

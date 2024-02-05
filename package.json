@@ -8,13 +8,13 @@
     "install-client": "pnpm --dir ./client install",
     "install-server": "pnpm --dir ./server install",
     "install": "pnpm install-client && pnpm install-server",
+    "test": "pnpm --dir ./server test",
     "client": "pnpm --dir ./client dev",
     "server": "pnpm --dir ./server start",
-    "build": "pnpm --dir ./client build",
+    "build": "pnpm --dir ./client build && pnpm --dir ./server build",
     "deploy": "pnpm run build && pnpm run server",
     "cluster": "pnpm --dir ./server cluster",
-    "deploy-cluster": "pnpm run build && pnpm run cluster",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy-cluster": "pnpm run build && pnpm run cluster"
   },
   "keywords": [],
   "author": "devSaifur",
