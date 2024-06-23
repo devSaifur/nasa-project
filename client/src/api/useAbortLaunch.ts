@@ -2,7 +2,7 @@ import { API_URL } from '@/utils/const'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axios, { isAxiosError } from 'axios'
 
-function useAbortLaunch() {
+export function useAbortLaunch() {
   const queryClient = useQueryClient()
 
   const {
@@ -28,5 +28,3 @@ function useAbortLaunch() {
 
   return { abortLaunch, isAbortingLaunch }
 }
-
-export { useAbortLaunch }

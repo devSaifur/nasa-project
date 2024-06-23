@@ -2,7 +2,7 @@ import { API_URL } from '@/utils/const'
 import { useQuery } from '@tanstack/react-query'
 import axios, { isAxiosError } from 'axios'
 
-function useGetLaunches() {
+export function useGetLaunches() {
   const {
     data: launches,
     isLoading: isGettingLaunches,
@@ -22,8 +22,6 @@ function useGetLaunches() {
 
   return { launches, isGettingLaunches }
 }
-
-export { useGetLaunches }
 
 export type Launch = {
   flightNumber: number

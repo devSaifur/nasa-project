@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import axios, { isAxiosError } from 'axios'
 import { API_URL } from '@/utils/const'
 
-function usePostLaunch() {
+export function usePostLaunch() {
   const {
     mutate: addLaunch,
     isPending: isLaunching,
@@ -21,8 +21,6 @@ function usePostLaunch() {
 
   return { addLaunch, isLaunching, isLaunched }
 }
-
-export { usePostLaunch }
 
 export type NewLaunch = {
   mission: string

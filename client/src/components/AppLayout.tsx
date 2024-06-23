@@ -4,7 +4,7 @@ import Footer from './Footer'
 
 const AppLayout = () => {
   return (
-    <div className="bg-primaryBG relative flex h-screen flex-col overflow-y-auto px-40 pt-8 text-primary">
+    <div className="relative flex h-screen flex-col overflow-y-auto bg-primaryBG px-40 pt-8 text-primary">
       <Navbar />
       <Outlet />
       <Footer />

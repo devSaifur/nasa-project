@@ -2,7 +2,7 @@ import { API_URL } from '@/utils/const'
 import { useQuery } from '@tanstack/react-query'
 import axios, { isAxiosError } from 'axios'
 
-function usePlanets() {
+export function usePlanets() {
   const {
     data: planets,
     isLoading: isLoadingPlanets,
@@ -22,8 +22,6 @@ function usePlanets() {
 
   return { planets, isLoadingPlanets }
 }
-
-export { usePlanets }
 
 export type Planet = {
   kepler_name: string
