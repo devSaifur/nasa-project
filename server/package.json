@@ -5,8 +5,8 @@
   "type": "commonjs",
   "main": "dist/server.js",
   "scripts": {
-    "start": "node --trace-warnings dist/server.js",
-    "dev": "node --trace-warnings --watch dist/server.js",
+    "start": "ts-node src/server.ts",
+    "dev": "nodemon --exec ts-node src/server.ts",
     "build": "tsc",
     "cluster": "pm2 start dist/server.js -i max",
     "deploy": "pm2 start server.js -i max",
@@ -31,7 +31,9 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.11.16",
     "@types/supertest": "^6.0.2",
+    "nodemon": "^3.1.4",
     "supertest": "^6.3.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
     "vitest": "^1.2.2"
   },
