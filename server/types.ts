@@ -1,11 +1,11 @@
-type Planet = {
+export type Planet = {
   kepler_name: string
   koi_disposition: 'CONFIRMED'
   koi_insol: number
   koi_prad: number
 }
 
-type Launch = {
+export type Launch = {
   flightNumber: number
   mission?: string
   rocket: string
@@ -16,13 +16,13 @@ type Launch = {
   destination?: string
 }
 
-type FindLaunch = {
+export type FindLaunch = {
   flightNumber: number
   mission?: string
   rocket?: string
 }
 
-type QueryParams = {
+export type QueryParams = {
   page: number
   limit: number
 }

@@ -1,6 +1,7 @@
 import { createReadStream } from 'node:fs'
 import { parse } from 'csv-parse'
 import { planets } from './planets.mongo'
+import { Planet } from '../../types'
 
 export async function getAllPlanets() {
   try {

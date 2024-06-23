@@ -12,6 +12,4 @@ const launchesSchema = new Schema({
   success: { type: Boolean, default: true },
 })
 
-const launches = mongoose.model('Launch', launchesSchema)
-
-export { launches }
+export const launches = mongoose.model('Launch', launchesSchema)

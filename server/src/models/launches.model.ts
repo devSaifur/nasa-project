@@ -2,6 +2,8 @@ import axios, { isAxiosError } from 'axios'
 import { launches as launchesDB } from './launches.mongo'
 import { planets as planetsDB } from './planets.mongo'
 
+import type { FindLaunch, Launch } from '../../types'
+
 const DEFAULT_FLIGHT_NUMBER = 100
 const SPACEX_API_URL = 'https://api.spacexdata.com/v5/launches/query'
 

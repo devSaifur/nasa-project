@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
 import 'dotenv/config'
 
-const MONGO_URI = process.env.MONGO_URI as string
+const MONGODB_URL = process.env.MONGODB_URL as string
 
 export async function connectDB() {
-  await mongoose.connect(MONGO_URI)
+  await mongoose.connect(MONGODB_URL)
 }
 
 mongoose.connection.once('open', () => {
@@ -17,7 +17,7 @@ mongoose.connection.on('error', (error) => {
 })
 
 export async function mongoConnect() {
-  await mongoose.connect(MONGO_URI)
+  await mongoose.connect(MONGODB_URL)
 }
 export async function mongoDisconnect() {
   await mongoose.disconnect()

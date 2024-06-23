@@ -5,6 +5,4 @@ const planetsSchema = new Schema({
   kepler_name: String,
 })
 
-const planets = mongoose.model('Planet', planetsSchema)
-
-export { planets }
+export const planets = mongoose.model('Planet', planetsSchema)
